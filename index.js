@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const dns = require('dns')
+const bodyParser = require('body-parser');
 
 // Basic Configuration
 const port = process.env.PORT || 3000;
@@ -28,7 +29,7 @@ app.post('/api/shorturl', function(req,res) {
 const options = { 
   all:true, 
 }; 
-console.log(req.body.url.toString())
+console.log(req.body.url.toString() + "Im here!")
 dns.lookup(req.body.url.toString(),options ,(err,address) => {
   console.log(address)
 })
