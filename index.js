@@ -38,25 +38,39 @@ const options = {
   all:true, 
 }; 
 
-let record_to_insert = new Model({
-  url: req.body.url.toString(),
-  id: parseInt(Math.random() * 999999)
-})
+async function saveAndFindRecord(req) {
+  try {
+    const recordToInsert = new Model({
+      url: req.body.url.toString(),
+      id: parseInt(Math.random() * 999999)
+    });
 
-record_to_insert
-   .save()
-   .then((doc) => {
-    console.log(doc)
-   })
-   .catch((err) => {
-    console.log(err)
-   })
+    const savedDoc = await recordToInsert.save();
+    console.log('Saved Document:', savedDoc);
 
-console.log(req.body.url.toString() + "Im here!")
-dns.lookup(req.body.url.toString(),options ,(err,address) => {
-  console.log(address)
-})
-  res.json({original_url: req.body.url, short_url: "here"})
+    const foundDoc = await Model.findOne({ url: req.body.url });
+    if (foundDoc) {
+      console.log('Found Document:', foundDoc);
+      res.json({
+        "original_url": foundDoc.url,
+        "short_url": foundDoc.id
+        })
+    } else {
+      console.log('No document found with that URL.');
+    }
+  } catch (err) {
+    console.error('Error:', err);
+  }
+}
+
+saveAndFindRecord(req);
+   
+   
+
+//dns.lookup(reply.url,options ,(err,address) => {
+ // console.log(address)
+//})
+ // res.json({original_url: reply._conditions.url, short_url: reply._conditions.id })
 })
 
 app.listen(port, function() {
