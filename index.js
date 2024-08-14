@@ -5,6 +5,8 @@ const app = express();
 const dns = require('dns')
 const mongoose = require('mongoose');
 const { type } = require('express/lib/response');
+const { url } = require('inspector');
+const { json } = require('body-parser');
 
 // Basic Configuration
 const port = process.env.PORT || 3000;
@@ -71,6 +73,42 @@ saveAndFindRecord(req);
  // console.log(address)
 //})
  // res.json({original_url: reply._conditions.url, short_url: reply._conditions.id })
+})
+
+app.get("/api/shorturl/:urlId", (req,res) =>{
+
+  const options = { 
+    all:true, 
+  }; 
+
+async function routeById(req){
+  try {
+    const { urlId } = req.params;
+
+   // console.log("urlId: " + JSON.stringify(urlId))
+
+    //const newObjectId = new mongoose.Types.ObjectId(urlId);
+
+    const numberId = JSON.parse(urlId);
+{ url: req.body.url }
+    console.log(numberId)
+
+    const routeByUrl = await Model.findOne({ id: Number(numberId)});
+
+    if (routeByUrl) {
+      console.log("Found record: ", routeByUrl);
+      res.redirect(routeByUrl.url);
+    } else {
+      console.log("Found record: ", routeByUrl);
+      console.log('that didnt work')
+    }} catch (err) {
+      console.error('Error by console: ', err)
+    }
+  
+}
+
+routeById(req);
+ 
 })
 
 app.listen(port, function() {
