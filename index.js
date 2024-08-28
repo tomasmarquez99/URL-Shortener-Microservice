@@ -59,6 +59,11 @@ app.post('/api/shorturl', function (req, res) {
 
      if(URLisValid(URLstring)){
       console.log("running formula")
+      const recordToInsert = new Model({
+        url: req.body.url.toString(),
+        id: parseInt(Math.random() * 999999)
+      });
+      
       const savedDoc = await recordToInsert.save();
       console.log('Saved Document:', savedDoc);
      } else {
