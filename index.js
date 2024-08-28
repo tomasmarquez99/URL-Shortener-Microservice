@@ -67,7 +67,7 @@ app.post('/api/shorturl', function (req, res) {
       const savedDoc = await recordToInsert.save();
       console.log('Saved Document:', savedDoc);
      } else {
-      console.log("stopped")
+      res.send({ error: 'invalid url' })
      }
 
       
